@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Cyber PSA from Someone Who Cares</title>
+<meta name="description" content="The scams doing the rounds in the UK right now, what to do about each one, and a few simple habits that stop most of them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f0; --card:#ffffff; --ink:#1c1b19; --muted:#5d5a53; --line:#e4e0d6;
+  --accent:#0f6b5c; --accent-soft:#e2f1ed; --warn:#b4471f; --warn-soft:#fbeae3;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121412; --card:#1b1e1c; --ink:#ecebe6; --muted:#a6a39b; --line:#2c302d;
+    --accent:#5ec9b4; --accent-soft:#183029; --warn:#f08a62; --warn-soft:#33211a;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 64px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.2;margin:0 0 .4em}
+h1{font-size:clamp(2rem,6vw,2.9rem);letter-spacing:-.01em}
+h2{font-size:1.7rem;margin-top:2.2em}
+h3{font-size:1.25rem}
+a{color:var(--accent)}
+p{margin:0 0 1em}
+.muted{color:var(--muted)}
+
+/* personalise bar */
+.bar{background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px}
+.bar-inner{max-width:760px;margin:0 auto}
+.bar form{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.bar label{display:flex;flex-direction:column;font-size:.8rem;color:var(--muted);flex:1 1 140px}
+.bar input{font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+button{font:600 .95rem Inter,sans-serif;padding:10px 16px;border-radius:10px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+@media (prefers-color-scheme: dark){button{color:#0c1a16}}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.result{margin-top:10px;display:none;gap:8px;flex-wrap:wrap;align-items:center}
+.result input{flex:1 1 260px;font:inherit;font-size:.85rem;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.hint{font-size:.85rem;color:var(--muted);margin:0 0 8px}
+
+header.hero{padding:44px 0 8px}
+.greeting{display:none;font-family:Fraunces,Georgia,serif;font-size:1.15rem;color:var(--accent);margin-bottom:10px}
+.tldr{background:var(--accent-soft);border-radius:var(--radius);padding:16px 18px;margin:20px 0}
+.tldr strong{display:block;margin-bottom:4px}
+
+nav.jump{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+nav.jump a{font-size:.88rem;text-decoration:none;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink)}
+nav.jump a:hover{border-color:var(--accent)}
+
+.scam{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 20px 6px;margin:14px 0;scroll-margin-top:16px}
+.do{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:8px;padding:10px 14px;margin:0 0 14px}
+.do b{color:var(--warn)}
+
+.habits{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.habits li{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px 6px}
+
+.numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.num{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.num .big{font:700 1.7rem Fraunces,Georgia,serif;color:var(--accent);display:block}
+.num span{font-size:.92rem;color:var(--muted)}
+
+footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
+.signoff{font-family:Fraunces,Georgia,serif;font-size:1.2rem;margin-top:28px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-inner">
+    <p class="hint" id="barHint">Make it personal: add who it's for and who it's from, then send them the link.</p>
+    <form id="makeForm">
+      <label>To<input id="toIn" maxlength="40" placeholder="e.g. Mum" autocomplete="off"></label>
+      <label>From<input id="fromIn" maxlength="40" placeholder="e.g. Aman" autocomplete="off"></label>
+      <button type="submit">Create my link</button>
+    </form>
+    <div class="result" id="result">
+      <input id="linkOut" readonly aria-label="Your personalised link">
+      <button type="button" id="copyBtn">Copy</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <header class="hero">
+    <div class="greeting" id="greeting"></div>
+    <h1>A cyber PSA from someone who cares</h1>
+    <p>I work in cyber security, and I see the same scams catch good, sensible people every week. This is a short guide to what's doing the rounds in the UK right now and what to do about each one. You don't need to be technical, you just need to know the patterns.</p>
+    <div class="tldr">
+      <strong>Only got two minutes?</strong>
+      Read <a href="#hang-up">Hang up, look it up</a> and <a href="#family-word">Have a family code word</a>. Those two habits stop most of what follows.
+    </div>
+    <nav class="jump" aria-label="Jump to a scam">
+      <a href="#bank">"This is your bank"</a>
+      <a href="#parcel">Parcel &amp; HMRC texts</a>
+      <a href="#hi-mum">"Hi Mum"</a>
+      <a href="#voice">AI voice clones</a>
+      <a href="#codes">One-time codes</a>
+      <a href="#wrong-number">Wrong-number texts</a>
+      <a href="#investment">Investment &amp; crypto</a>
+      <a href="#shops">Fake online shops</a>
+      <a href="#tech">Tech support calls</a>
+      <a href="#boss">The boss's gift cards</a>
+      <a href="#passwords">Reused passwords</a>
+    </nav>
+  </header>
+
+  <h2>Scams to watch for</h2>
+
+  <section class="scam" id="bank">
+    <h3>"This is your bank's fraud team"</h3>
+    <p>Someone calls saying there's suspicious activity on your account. They often know your name, your bank, even the last few digits of your card, and the number on your screen may look like the bank's real one. They'll ask you to move money to a "safe account", read out a code, or hand your card to a courier.</p>
+    <p class="do"><b>What to do:</b> Hang up. Your bank will never ask you to move money to keep it safe, and will never send someone to collect your card. Call <strong>159</strong> from a different phone if you can, or wait a few minutes so the line clears, and it connects you to your real bank.</p>
+  </section>
+
+  <section class="scam" id="parcel">
+    <h3>Parcel, HMRC and "unpaid fine" texts</h3>
+    <p>"Your parcel couldn't be delivered, pay £1.45 to rebook." "You're due a tax refund." "You have an unpaid parking charge." The amounts are small on purpose, because the real goal is your card details.</p>
+    <p class="do"><b>What to do:</b> Don't tap the link. Forward the text to <strong>7726</strong> (it's free), then delete it. If you're worried it's real, go to the official website or app yourself.</p>
+  </section>
+
+  <section class="scam" id="hi-mum">
+    <h3>"Hi Mum, I've lost my phone"</h3>
+    <p>A WhatsApp from an unknown number: "This is my new number, my phone broke." A little chat, then an urgent request to pay a bill because their banking app "isn't working yet".</p>
+    <p class="do"><b>What to do:</b> Call the old number you already have, or ring someone who'd know. Never pay anything until you've actually spoken to them.</p>
+  </section>
+
+  <section class="scam" id="voice">
+    <h3>AI voice and video clones</h3>
+    <p>A few seconds of someone's voice from social media is now enough to fake a convincing phone call. It sounds like your child, your partner or your parent, in trouble and needing money right now.</p>
+    <p class="do"><b>What to do:</b> Ask for the <a href="#family-word">family code word</a>. No code word, no money, however real it sounds.</p>
+  </section>
+
+  <section class="scam" id="codes">
+    <h3>"Just read me the code we've sent"</h3>
+    <p>Those six-digit codes you get by text or in an app are the last lock on your account. Scammers will pose as your bank, your phone company, Amazon or WhatsApp support to get you to read one out.</p>
+    <p class="do"><b>What to do:</b> Never share a one-time code with anyone, on any channel, for any reason. Nobody legitimate will ever ask for it.</p>
+  </section>
+
+  <section class="scam" id="wrong-number">
+    <h3>The friendly wrong-number text</h3>
+    <p>"Hi, is this David? Are we still on for dinner?" It feels rude not to reply. That reply starts a slow, friendly chat that can run for weeks before it turns into a romance or an "amazing investment".</p>
+    <p class="do"><b>What to do:</b> Don't reply, not even to say "wrong number". Block and delete.</p>
+  </section>
+
+  <section class="scam" id="investment">
+    <h3>Investment and crypto "opportunities"</h3>
+    <p>Fake adverts with celebrities, slick trading apps that show your money growing, a new online friend who's done really well. The early "profits" are fake, and you only find out when you try to withdraw.</p>
+    <p class="do"><b>What to do:</b> Check any firm on the FCA register (<a href="https://register.fca.org.uk/" rel="noopener">register.fca.org.uk</a>) and its warning list before you invest a penny. Guaranteed high returns are the tell.</p>
+  </section>
+
+  <section class="scam" id="shops">
+    <h3>Too-good-to-be-true online shops</h3>
+    <p>Social media ads for designer goods at 80% off, or a "closing down sale". What arrives is a cheap knock-off, or nothing at all.</p>
+    <p class="do"><b>What to do:</b> Pay by credit card where you can. For anything between £100 and £30,000, Section 75 makes the card company jointly responsible if it goes wrong. Debit cards and PayPal have weaker chargeback protection, and bank transfers to strangers have the least.</p>
+  </section>
+
+  <section class="scam" id="tech">
+    <h3>Tech support calls and pop-ups</h3>
+    <p>A call "from Microsoft" or "your broadband provider", or a scary pop-up saying your computer is infected. They want you to install software that gives them remote control.</p>
+    <p class="do"><b>What to do:</b> Hang up or close the browser. Real companies don't call you about viruses. Never let anyone you don't know remote into your device.</p>
+  </section>
+
+  <section class="scam" id="boss">
+    <h3>The boss who urgently needs gift cards</h3>
+    <p>An email or message that looks like it's from your manager: they're in a meeting, it's urgent, can you buy some gift cards or pay this invoice and send the codes.</p>
+    <p class="do"><b>What to do:</b> Pick up the phone and ask them directly, using a number you already have. Then report it to your IT or security team so they can warn others.</p>
+  </section>
+
+  <section class="scam" id="passwords">
+    <h3>Reused passwords</h3>
+    <p>Websites get breached all the time, and the stolen email-and-password lists are traded online. Criminals then try those same details on your email, bank and shopping accounts, because they know most people reuse them.</p>
+    <p class="do"><b>What to do:</b> Check your email addresses at <a href="https://haveibeenpwned.com/" rel="noopener">haveibeenpwned.com</a>. Anywhere you've reused a breached password, change it.</p>
+  </section>
+
+  <h2>Simple habits that protect you</h2>
+  <ul class="habits">
+    <li id="hang-up">
+      <h3>Hang up, look it up</h3>
+      <p>Never act on a message or call that came to you. However real it looks, stop, then contact the organisation yourself using the app, the website you normally use, or the number on the back of your card. This one habit beats almost every scam on this page.</p>
+    </li>
+    <li id="family-word">
+      <h3>Have a family code word</h3>
+      <p>Agree a word with your close family, in person, and never write it in a message. Make it something that sounds natural in conversation. If someone calls sounding like one of you and asking for money, they need to say it.</p>
+    </li>
+    <li>
+      <h3>Use a password manager</h3>
+      <p>Let it create and remember a different strong password for every site, so you only need to remember one. Your phone already has one built in (Apple Passwords or Google Password Manager), or use something like 1Password or Bitwarden.</p>
+    </li>
+    <li>
+      <h3>Turn on two-step verification</h3>
+      <p>Especially on your email, bank and social media. An authenticator app or a passkey is stronger than a text message code, but any of them is far better than nothing.</p>
+    </li>
+    <li>
+      <h3>Slow down when it's urgent</h3>
+      <p>Pressure is the scammer's main tool: "act now", "don't tell anyone", "your account will be closed". A genuine organisation will always let you take ten minutes to check.</p>
+    </li>
+    <li>
+      <h3>Keep an eye on your credit file</h3>
+      <p>Check your free credit reports from Experian, Equifax and TransUnion now and then, through apps like ClearScore or Credit Karma. If your identity has already been misused, <a href="https://www.cifas.org.uk/pr" rel="noopener">Cifas Protective Registration</a> adds a warning flag to your name.</p>
+    </li>
+  </ul>
+
+  <h2>If it happens to you</h2>
+  <p>Act fast and don't be embarrassed. These scams are run by professionals and they fool clever people every day.</p>
+  <div class="numbers">
+    <div class="num"><span class="big">159</span><span>Call your bank straight away to stop or recover payments.</span></div>
+    <div class="num"><span class="big">7726</span><span>Forward scam texts here, free.</span></div>
+    <div class="num"><span class="big">0300 123 2040</span><span>Report Fraud, which replaced Action Fraud in December 2025. Online at <a href="https://www.reportfraud.police.uk/" rel="noopener">reportfraud.police.uk</a>.</span></div>
+    <div class="num"><span class="big">report@<wbr>phishing.gov.uk</span><span>Forward suspicious emails to the National Cyber Security Centre.</span></div>
+  </div>
+  <p style="margin-top:16px">If you were tricked into sending a bank transfer, your bank must usually refund you, up to £85,000, under the UK's scam reimbursement rules. Report it within 13 months, and the sooner the better.</p>
+
+  <p class="signoff" id="signoff">Stay safe, and pass this on.</p>
+
+  <footer>
+    <p>Inspired by the <a href="https://ciso-series.github.io/cyber-psa/" rel="noopener">CISO Series Cyber PSA</a>. UK version by CYBERCATION. General guidance, not financial or legal advice.</p>
+    <button type="button" class="ghost" id="makeOwn">Make your own version to send</button>
+  </footer>
+</main>
+
+<script>
+(function(){
+  function enc(obj){ return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/=+$/,''); }
+  function dec(s){ try{ return JSON.parse(decodeURIComponent(escape(atob(s)))); }catch(e){ return null; } }
+  var clean = function(v){ return (v||'').toString().trim().slice(0,40); };
+
+  var data = location.hash.length > 1 ? dec(location.hash.slice(1)) : null;
+  var to = data && clean(data.t), from = data && clean(data.f);
+  var greeting = document.getElementById('greeting');
+  var bar = document.querySelector('.bar');
+
+  if (to || from) {
+    greeting.style.display = 'block';
+    greeting.textContent = (to ? 'For ' + to : '') + (to && from ? ', ' : '') + (from ? 'from ' + from : '');
+    if (from) document.getElementById('signoff').textContent = 'Stay safe, and pass this on. — ' + from;
+    if (to) document.title = 'A cyber PSA for ' + to;
+    bar.style.display = 'none';
+  }
+
+  document.getElementById('makeOwn').addEventListener('click', function(){
+    bar.style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+    document.getElementById('toIn').focus();
+  });
+
+  document.getElementById('makeForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var payload = {t: clean(document.getElementById('toIn').value), f: clean(document.getElementById('fromIn').value)};
+    var url = location.origin + location.pathname + '#' + enc(payload);
+    var out = document.getElementById('linkOut');
+    out.value = url;
+    document.getElementById('result').style.display = 'flex';
+    out.select();
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var out = document.getElementById('linkOut'), btn = this;
+    var done = function(){ btn.textContent = 'Copied'; setTimeout(function(){ btn.textContent = 'Copy'; }, 1800); };
+    if (navigator.clipboard) { navigator.clipboard.writeText(out.value).then(done, function(){ out.select(); document.execCommand('copy'); done(); }); }
+    else { out.select(); document.execCommand('copy'); done(); }
+  });
+})();
+</script>
+</body>
+</html>
